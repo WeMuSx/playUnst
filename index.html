@@ -1,0 +1,106 @@
+import React, { useMemo, useState } from "react";
+
+
+// ------------------------------------------------------------
+// Unternehmensrechnung – Lernspiel (2.-Semester BWL)
+// Single-file React component with TailwindCSS styling
+// ------------------------------------------------------------
+// Sections:
+// 1) Learn: concise, color-coded explanations
+// 2) Play: mini-games (Bilanz-Baukasten, GuV/CF Szenarien, DB/Break-even)
+// 3) Quiz: quick checks with feedback
+// ------------------------------------------------------------
+
+
+// Utility types
+type Item = {
+id: string;
+label: string;
+value: number; // positive numbers; sign handled by placement rules
+hint: string;
+};
+
+
+function Badge({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+return (
+<span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${className}`}>
+{children}
+</span>
+);
+}
+
+
+function Card({ title, children, className = "" }: { title?: string; children: React.ReactNode; className?: string }) {
+return (
+<div className={`rounded-2xl shadow-sm border border-slate-200 bg-white p-5 ${className}`}>
+{title && <h3 className="text-lg font-semibold mb-3 text-slate-800">{title}</h3>}
+{children}
+</div>
+);
+}
+
+
+function SectionTitle({ emoji, title, subtitle }: { emoji?: string; title: string; subtitle?: string }) {
+return (
+<div className="mb-4">
+<div className="flex items-baseline gap-3">
+<h2 className="text-2xl font-bold text-slate-900">{emoji ? `${emoji} ` : ''}{title}</h2>
+{subtitle && <p className="text-slate-500">{subtitle}</p>}
+</div>
+</div>
+);
+}
+
+
+function Divider() {
+return <div className="h-px w-full bg-slate-200 my-6" />;
+}
+
+
+// -----------------------------
+// Bilanz-Baukasten Game
+// -----------------------------
+function BilanzBaukasten() {
+const initialItems: Item[] = useMemo(() => [
+{ id: "bank", label: "Bankguthaben", value: 30000, hint: "Liquide Mittel → Aktivseite" },
+{ id: "ford", label: "Forderungen aus LuL", value: 20000, hint: "Anspruch gegen Kunden → Aktivseite" },
+{ id: "anlage", label: "Büroausstattung", value: 10000, hint: "Sachanlage → Aktivseite" },
+{ id: "vvl", label: "Verbindlichkeiten a. LuL", value: 20000, hint: "Schulden ggü. Lieferanten → Passivseite (Fremdkapital)" },
+{ id: "ek0", label: "Eigenkapital (Anfang)", value: 40000, hint: "Restgröße → Passivseite (Eigenkapital)" },
+], []);
+
+
+const [assets, setAssets] = useState<string[]>([]);
+const [liabs, setLiabs] = useState<string[]>([]);
+const [leftovers, setLeftovers] = useState<string[]>(initialItems.map(i => i.id));
+const [profit, setProfit] = useState<number | null>(null);
+const [message, setMessage] = useState<string>("");
+
+
+const itemsById = useMemo(() => Object.fromEntries(initialItems.map(i => [i.id, i])), [initialItems]);
+
+
+const totals = useMemo(() => {
+const sum = (ids: string[]) => ids.reduce((acc, id) => acc + (itemsById[id]?.value ?? 0), 0);
+return {
+assets: sum(assets),
+liabs: sum(liabs),
+};
+}, [assets, liabs, itemsById]);
+
+
+function move(id: string, target: "assets" | "liabs" | "back") {
+setMessage("");
+setProfit(null);
+setAssets(prev => prev.filter(x => x !== id));
+setLiabs(prev => prev.filter(x => x !== id));
+setLeftovers(prev => prev.filter(x => x !== id));
+
+
+if (target === "assets") setAssets(prev => [...prev, id]);
+if (target === "liabs") setLiabs(prev => [...prev, id]);
+if (target === "back") setLeftovers(prev => [...prev, id]);
+}
+
+
+}
