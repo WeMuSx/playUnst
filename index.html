@@ -1,95 +1,365 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Unternehmensrechnung – Lernspiel</title>
-<style>
-:root{
---bg: #f7f9fb;
---panel: #ffffff;
---ink: #0f172a; /* slate-900 */
---muted: #64748b; /* slate-500 */
---line: #e2e8f0; /* slate-200 */
---sky: #0369a1; --sky-50:#f0f9ff; --sky-100:#e0f2fe;
---vio: #6d28d9; --vio-50:#f5f3ff; --vio-100:#ede9fe;
---emer: #047857; --emer-50:#ecfdf5; --emer-100:#d1fae5;
---amber:#b45309; --amber-50:#fffbeb; --amber-100:#fef3c7;
---rose:#be123c; --rose-50:#fff1f2;
---radius: 16px;
---shadow: 0 1px 2px rgba(2,6,23,.04), 0 8px 30px rgba(2,6,23,.06);
-}
-html,body{margin:0; padding:0; background: var(--bg); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, Noto Sans, "Apple Color Emoji", "Segoe UI Emoji";}
-.container{max-width: 1100px; margin: 0 auto; padding: 24px;}
-header h1{font-size: clamp(24px, 3vw, 34px); margin:0 0 6px}
-header p{margin:0; color: var(--muted)}
-
-
-/* Tabs */
-.tabs{display:flex; gap:8px; margin:18px 0 22px}
-.tab{border:1px solid var(--line); background: var(--panel); padding:10px 14px; border-radius: 999px; cursor:pointer; transition:.2s;}
-.tab[aria-selected="true"]{background: var(--ink); color:#fff; border-color:var(--ink)}
-
-
-/* Layout */
-.grid{display:grid; gap:16px}
-.grid-3{grid-template-columns: repeat(3, minmax(0,1fr));}
-.grid-2{grid-template-columns: repeat(2, minmax(0,1fr));}
-@media (max-width: 860px){ .grid-3{grid-template-columns: 1fr;} .grid-2{grid-template-columns: 1fr;} }
-
-
-/* Card */
-.card{background: var(--panel); border:1px solid var(--line); border-radius: var(--radius); padding:18px; box-shadow: var(--shadow)}
-.card h3{margin:0 0 10px; font-size: 18px}
-
-
-/* Badges */
-.badge{display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:12px; padding:6px 10px; border-radius:999px}
-.b-sky{background:var(--sky-100); color:var(--sky)}
-.b-vio{background:var(--vio-100); color:var(--vio)}
-.b-emer{background:var(--emer-100); color:var(--emer)}
-.b-amber{background:var(--amber-100); color:var(--amber)}
-
-
-/* Controls */
-.btn{appearance:none; border:1px solid var(--line); background:#fff; padding:10px 14px; border-radius:12px; cursor:pointer; transition:.2s;}
-.btn:focus{outline:3px solid #93c5fd33}
-.btn.primary{background: var(--emer); color:#fff; border-color: transparent}
-.btn.dark{background: var(--ink); color:#fff; border-color: transparent}
-.btn.indigo{background: var(--vio); color:#fff; border-color: transparent}
-.btn:hover{transform: translateY(-1px)}
-
-
-.input{width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:12px; background:#fff}
-label{font-size:12px; color:var(--muted); display:block; margin-bottom:6px}
-
-
-.hint{color:var(--muted); font-size:13px}
-.divider{height:1px; background:var(--line); margin:16px 0}
-
-
-/* Drag & drop lists */
-.list{min-height:180px; padding:8px; border:1px dashed var(--line); border-radius:12px; background: #fff}
-.list.dragover{background: #f8fafc}
-.item{display:flex; align-items:center; justify-content:space-between; gap:10px; border:1px solid var(--line); border-radius:12px; padding:10px 12px; background:#fff; transition:.15s}
-.item:hover{box-shadow: var(--shadow)}
-.pill{font-size:12px; padding:4px 8px; border-radius:999px; border:1px solid var(--line);}
-
-
-/* Feedback */
-.ok{background: var(--emer-50); border-left: 4px solid var(--emer); padding:10px 12px; border-radius:10px}
-.warn{background: var(--amber-50); border-left: 4px solid var(--amber); padding:10px 12px; border-radius:10px}
-.err{background: var(--rose-50); border-left: 4px solid var(--rose); padding:10px 12px; border-radius:10px}
-
-
-.section-title{display:flex; align-items:baseline; gap:10px; margin: 8px 0 12px}
-.section-title h2{font-size: 22px; margin:0}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Minimal Crossy – Ninja-Küken</title>
+  <style>
+    :root{
+      --bg0:#0f172a; --bg1:#111827; --fg:#e5e7eb; --muted:#94a3b8;
+      --accent:#22d3ee; --accent2:#a78bfa; --safe:#10b981; --danger:#ef4444; --water:#0ea5e9; --road:#334155;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    html,body{height:100%;margin:0;color:var(--fg);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:
+      radial-gradient(1200px 600px at 10% -10%, rgba(34,211,238,.08), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, rgba(167,139,250,.08), transparent 50%),
+      linear-gradient(180deg, var(--bg0), var(--bg1));}
+    .wrap{display:grid;place-items:center;height:100%;padding:16px}
+    .card{width:min(100%,980px);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);backdrop-filter:blur(8px);border-radius:24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    header{position:absolute;inset:16px auto auto 16px;z-index:3;display:flex;gap:10px;align-items:center;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);font-weight:600;letter-spacing:.2px;box-shadow:var(--shadow);user-select:none}
+    header .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px rgba(34,211,238,.8)}
+    #game{display:block;width:100%;height:70vh;max-height:700px;aspect-ratio: 10/12}
+    .hud{position:absolute;inset:auto 16px 16px auto;z-index:3;display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:8px 12px;border-radius:12px;color:var(--muted);font-size:14px;font-weight:600}
+    .hud b{color:var(--fg)}
+    .overlay{position:absolute;inset:0;display:grid;place-items:center;z-index:2;background:linear-gradient(180deg, rgba(15,23,42,.6), rgba(17,24,39,.6));backdrop-filter:blur(2px);transition:opacity .25s ease}
+    .overlay.hidden{opacity:0;pointer-events:none}
+    .panel{max-width:560px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;box-shadow:var(--shadow);padding:26px;text-align:center}
+    h1{margin:0 0 8px;font-size:clamp(22px,4vw,32px)}
+    p{margin:0 0 10px;color:var(--muted)}
+    .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+    button{appearance:none;border:none;cursor:pointer;font-weight:700;letter-spacing:.3px;padding:12px 16px;border-radius:14px;box-shadow:var(--shadow);transition:transform .06s ease}
+    .primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0b1020}
+    .ghost{background:transparent;color:var(--fg);border:1px solid rgba(255,255,255,.2)}
+    button:active{transform:scale(.98)}
+    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;background:rgba(255,255,255,.08);padding:2px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.1)}
+    footer{position:absolute;inset:auto 16px 16px 16px;color:var(--muted);font-size:12px;z-index:3}
+  </style>
 </head>
 <body>
-<div class="container">
-<header>
-<h1>Unternehmensrechnung – Lernspiel</h1>
-<p>2.-Semester BWL/V – farbcodiert, zugänglich, responsiv</p>
-</header>
+<div class="wrap">
+  <div class="card">
+    <header><span class="dot"></span> Minimal Crossy – Ninja-Küken</header>
+    <canvas id="game" aria-label="Crossy-Road-ähnliches Spiel" role="img"></canvas>
+
+    <div class="hud" aria-live="polite">
+      <span>Weite: <b id="score">0</b></span>
+      <span>Best: <b id="best">0</b></span>
+    </div>
+
+    <div id="start" class="overlay">
+      <div class="panel">
+        <h1>Springe nach vorne – weiche Bambusautos aus, nutze Baumstämme!</h1>
+        <p>Steuerung: <span class="kbd">WASD</span>/<span class="kbd">Pfeile</span> oder Wischen/Tippen in Richtung.</p>
+        <div class="btns">
+          <button class="primary" id="playBtn">Starten</button>
+          <button class="ghost" id="muteBtn" aria-pressed="false">🔊 Ton an/aus</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="gameover" class="overlay hidden">
+      <div class="panel">
+        <h1>Game Over</h1>
+        <p>Weite: <span id="finalScore">0</span></p>
+        <div class="btns">
+          <button class="primary" id="againBtn">Nochmal</button>
+          <button class="ghost" id="shareBtn">Teilen</button>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      Steuerung: <span class="kbd">WASD</span>/<span class="kbd">Pfeile</span> · Wischen/Tippen  
+    </footer>
+  </div>
+</div>
+
+<script>
+// ===== Utilities =====
+const clamp=(v,min,max)=> Math.max(min, Math.min(max, v));
+const rand=(a,b)=> Math.random()*(b-a)+a;
+const choice=a=> a[Math.floor(Math.random()*a.length)];
+
+// Audio (tiny)
+const ACTX=(window.AudioContext||window.webkitAudioContext)? new (window.AudioContext||window.webkitAudioContext)():null;
+let muted=false; function beep(type='square',f=600,d=0.05,v=0.04){ if(!ACTX||muted) return; const o=ACTX.createOscillator(); const g=ACTX.createGain(); o.type=type;o.frequency.value=f;g.gain.value=v;o.connect(g);g.connect(ACTX.destination);o.start();o.stop(ACTX.currentTime+d); }
+
+// Canvas
+const canvas=document.getElementById('game');
+const c=canvas.getContext('2d');
+let DPR=1; function resize(){ const r=canvas.getBoundingClientRect(); DPR=Math.min(window.devicePixelRatio||1,2); canvas.width=Math.floor(r.width*DPR); canvas.height=Math.floor(r.height*DPR); c.setTransform(DPR,0,0,DPR,0,0);} window.addEventListener('resize',resize,{passive:true}); resize();
+
+// Game constants
+const TILE=44; // css px
+const COLS=10; // width in tiles
+const VISIBLE_ROWS=14; // camera height
+const PLAYER_START_COL=Math.floor(COLS/2);
+const GRAVITY=0; // grid game, not used
+
+// NEW: Global Tempo-Drossel für alle bewegten Hindernisse
+const OBSTACLE_SPEED_SCALE = 0.55; // <— kleiner = langsamer
+
+// Types
+const ROW_GRASS='grass';
+const ROW_ROAD='road';
+const ROW_WATER='water';
+
+// Game state
+let world=[]; // array of rows from far (index 0) to near (last)
+let player={row:2,col:PLAYER_START_COL, alive:true, moving:false, px:0, py:0};
+let camOffset=0; // for smooth scrolling when advancing
+let score=0; let best=Number(localStorage.getItem('mc-best')||0);
+
+// Row generator
+function makeRow(idx){
+  // Difficulty scales with idx
+  const r=Math.random();
+  if(idx%7===0 && r<0.6) return {type:ROW_WATER, speed: choice([0.6,0.8,1.0])*choice([-1,1]), spawnGap: choice([3,4]), items: []};
+  if(r<0.55) return {type:ROW_ROAD, speed: choice([1.5,2,2.4,2.8])*choice([-1,1]), spawnGap: choice([3,4,5]), items: []};
+  return {type:ROW_GRASS, items: []};
+}
+
+// Build initial world
+function initWorld(){
+  world=[]; for(let i=0;i<VISIBLE_ROWS+14;i++){ world.push(makeRow(i)); }
+  // place some initial items on dynamic rows
+  for(let y=0;y<world.length;y++) if(world[y].speed){ seedRowItems(world[y], y); }
+}
+
+function seedRowItems(row, y){
+  const w=COLS; const gap=row.spawnGap||4; const len = row.type===ROW_ROAD? 2: 3; // car length vs log length
+  const base = Math.floor(rand(0,gap));
+  for(let i=base; i<w+gap; i+=gap){
+    row.items.push({x: i*1.0, len, sprite: Math.random()});
+  }
+}
+
+// Convert world coords to pixels
+function toX(col){ return col*TILE; }
+function toY(row){ return (VISIBLE_ROWS-row-1)*TILE + camOffset; }
+
+// Input handling
+let inputQueue=[]; function enqueue(dx,dy){ inputQueue.push({dx,dy}); }
+window.addEventListener('keydown',e=>{ const k=e.key; if(['ArrowUp','w','W'].includes(k)) enqueue(0,1); else if(['ArrowDown','s','S'].includes(k)) enqueue(0,-1); else if(['ArrowLeft','a','A'].includes(k)) enqueue(-1,0); else if(['ArrowRight','d','D'].includes(k)) enqueue(1,0); });
+
+// touch/swipe
+let touchStart=null; canvas.addEventListener('pointerdown',e=>{ touchStart={x:e.clientX,y:e.clientY};}); canvas.addEventListener('pointerup',e=>{ if(!touchStart) return; const dx=e.clientX-touchStart.x, dy=e.clientY-touchStart.y; const absX=Math.abs(dx), absY=Math.abs(dy); if(Math.max(absX,absY)<12){ /* tap forward */ enqueue(0,1); } else if(absX>absY){ enqueue(dx>0?1:-1,0); } else { enqueue(0, dy>0?-1:1); } touchStart=null;});
+
+// Movement
+function tryMove(dx,dy){ if(player.moving||!player.alive) return; const nc=clamp(player.col+dx,0,COLS-1); const nr=Math.max(player.row+dy,0); player.col=nc; if(dy>0){ player.row=nr; score=Math.max(score, player.row-1); camOffset+=TILE; beep('triangle',900,0.03,0.03);} else if(dy<0){ player.row=nr; camOffset-=TILE; }
+  player.moving=true; player.px=0; player.py=0; }
+
+// Row scrolling & obstacles update
+function updateDynamic(row, y, dt){
+  if(!row.speed) return;
+  const dir=Math.sign(row.speed);
+  // NEW: globale Drossel über OBSTACLE_SPEED_SCALE
+  const sp=Math.abs(row.speed)*60*OBSTACLE_SPEED_SCALE;
+  for(const it of row.items){ it.x += dir * (sp*dt) / (TILE); } // in tile units
+  // wrap
+  row.items.forEach(it=>{ if(dir>0 && it.x - it.len > COLS) it.x = -rand(1,3); if(dir<0 && it.x + it.len < 0) it.x = COLS + rand(0,2); });
+}
+
+function collideWith(row, y){
+  if(row.type===ROW_GRASS) return false;
+  const px=player.col+0.1, px2=player.col+0.9;
+  if(row.type===ROW_ROAD){
+    return row.items.some(it=> px2>it.x && px<it.x+it.len);
+  }
+  if(row.type===ROW_WATER){ // must be on a log
+    const log=row.items.find(it=> px2>it.x && px<it.x+it.len);
+    if(!log) return true; // fell in water
+    // carry the player with the log
+    const dir=Math.sign(row.speed); player.col += dir*0.015; player.col=clamp(player.col,0,COLS-1);
+    return false;
+  }
+  return false;
+}
+
+// Rendering
+function drawBackground(){
+  c.clearRect(0,0,canvas.width,canvas.height); // vignette layer
+  const g=c.createLinearGradient(0,0,0,canvas.height); g.addColorStop(0,'rgba(255,255,255,0.02)'); g.addColorStop(1,'rgba(0,0,0,0.08)'); c.fillStyle=g; c.fillRect(0,0,canvas.width,canvas.height);
+}
+
+function drawRow(row,y){
+  const px=0, py=toY(y); c.save(); c.translate(0, Math.round(py));
+  // tile strip
+  if(row.type===ROW_GRASS){
+    c.fillStyle='rgba(16,185,129,0.5)'; c.fillRect(0,0,COLS*TILE,TILE);
+    c.fillStyle='rgba(255,255,255,0.05)'; for(let i=0;i<COLS;i++){ c.fillRect(i*TILE+8,8,8,8);}
+  }
+  else if(row.type===ROW_ROAD){
+    c.fillStyle='rgba(51,65,85,0.9)'; c.fillRect(0,0,COLS*TILE,TILE); // lane stripes
+    c.fillStyle='rgba(255,255,255,0.25)'; for(let i=0;i<COLS;i++){ c.fillRect(i*TILE+TILE/2-2, TILE/2-2, 4, 4);}
+  }
+  else if(row.type===ROW_WATER){
+    c.fillStyle='rgba(14,165,233,0.85)'; c.fillRect(0,0,COLS*TILE,TILE);
+  }
+
+  // obstacles / platforms
+  if(row.items){
+    for(const it of row.items){
+      const x=Math.round(it.x*TILE);
+      const w=Math.round(it.len*TILE);
+
+      if(row.type===ROW_ROAD){
+        // === Bambus-Auto ===
+        const bodyH = TILE-10;
+        const bodyY = 5;
+        const radius = 10;
+
+        // Räder
+        c.fillStyle='rgba(0,0,0,0.55)';
+        const wheelR = 6;
+        c.beginPath(); c.arc(x+Math.max(12, w*0.2), TILE-3, wheelR, 0, Math.PI*2); c.fill();
+        c.beginPath(); c.arc(x+Math.min(w-12, w*0.8), TILE-3, wheelR, 0, Math.PI*2); c.fill();
+
+        // Karosserie (Bambus-Rohr)
+        const grd=c.createLinearGradient(x,0,x+w,0);
+        grd.addColorStop(0,'#34d399'); grd.addColorStop(0.5,'#10b981'); grd.addColorStop(1,'#34d399');
+        c.fillStyle=grd;
+        roundRect(c, x+4, bodyY, w-8, bodyH, radius); c.fill();
+
+        // Knotenringe am Bambus
+        c.fillStyle='rgba(0,0,0,0.15)';
+        for(let k=10;k<w-20;k+=22){
+          c.fillRect(x+4+k, bodyY+4, 3, bodyH-8);
+          c.fillRect(x+4+k+5, bodyY+3, 2, bodyH-6);
+        }
+
+        // "Fenster"
+        c.fillStyle='rgba(255,255,255,0.22)';
+        c.fillRect(x+10, bodyY+8, Math.max(18, w*0.35), bodyH-16);
+
+        // kleine Blätter-Deko
+        c.fillStyle='#22c55e';
+        c.beginPath();
+        c.moveTo(x+w-14, bodyY+8);
+        c.quadraticCurveTo(x+w-4, bodyY+10, x+w-8, bodyY+18);
+        c.quadraticCurveTo(x+w-18, bodyY+14, x+w-14, bodyY+8);
+        c.fill();
+      }
+      else if(row.type===ROW_WATER){
+        // Baumstamm (wie vorher)
+        c.fillStyle='rgba(236,196,141,0.9)'; roundRect(c,x+4,6,w-8,TILE-12,8); c.fill();
+        c.fillStyle='rgba(0,0,0,0.15)'; for(let k=8;k<w-16;k+=12){ c.fillRect(x+4+k, 10, 6, TILE-20);}
+      }
+    }
+  }
+
+  c.restore();
+}
+
+// === Ninja-Küken ===
+function drawPlayer(){
+  const x=toX(player.col), y=toY(player.row); c.save(); c.translate(Math.round(x), Math.round(y));
+  // smooth hop animation
+  const hop = player.moving ? Math.sin((player.px+player.py)/TILE*Math.PI)*8 : 0;
+  c.translate(0,-hop*0.3);
+
+  const size=TILE*0.74; const rx=(TILE-size)/2, ry=(TILE-size)/2;
+
+  // Schatten
+  c.fillStyle='rgba(0,0,0,0.25)'; c.beginPath(); c.ellipse(TILE/2, TILE-6, size*0.36, 6, 0, 0, Math.PI*2); c.fill();
+
+  // Körper (gelb)
+  const bodyGrad=c.createLinearGradient(0,ry,0,ry+size);
+  bodyGrad.addColorStop(0,'#fde68a'); // amber-300
+  bodyGrad.addColorStop(1,'#f59e0b'); // amber-500
+  c.fillStyle=bodyGrad; roundRect(c, rx, ry, size, size, 12); c.fill();
+
+  // Bauch (heller)
+  c.fillStyle='rgba(255,255,255,0.35)'; roundRect(c, rx+size*0.18, ry+size*0.42, size*0.64, size*0.40, 10); c.fill();
+
+  // Flügel
+  c.fillStyle='rgba(245,158,11,0.9)';
+  roundRect(c, rx-4, ry+size*0.42, size*0.28, size*0.24, 10); c.fill();
+  roundRect(c, rx+size- size*0.24+4, ry+size*0.42, size*0.28, size*0.24, 10); c.fill();
+
+  // Füße
+  c.fillStyle='#ea580c';
+  c.fillRect(TILE/2 - 10, ry+size-2, 8, 4);
+  c.fillRect(TILE/2 + 2,  ry+size-2, 8, 4);
+
+  // Ninja-Maske (schwarzes Band)
+  const maskY = ry+size*0.28;
+  c.fillStyle='rgba(0,0,0,0.9)';
+  roundRect(c, rx+size*0.08, maskY, size*0.84, size*0.22, 8); c.fill();
+
+  // Augen (auf Maske)
+  c.fillStyle='#ffffff';
+  const eyeY = maskY + size*0.06;
+  c.beginPath(); c.ellipse(TILE/2 - size*0.16, eyeY, 4, 4, 0, 0, Math.PI*2); c.fill();
+  c.beginPath(); c.ellipse(TILE/2 + size*0.16, eyeY, 4, 4, 0, 0, Math.PI*2); c.fill();
+  c.fillStyle='#0b1020';
+  c.beginPath(); c.ellipse(TILE/2 - size*0.16, eyeY, 1.6, 1.6, 0, 0, Math.PI*2); c.fill();
+  c.beginPath(); c.ellipse(TILE/2 + size*0.16, eyeY, 1.6, 1.6, 0, 0, Math.PI*2); c.fill();
+
+  // Stirnband (rot) + flatternde Enden
+  c.fillStyle='#ef4444';
+  c.fillRect(rx+size*0.06, maskY-4, size*0.52, 6);
+  c.beginPath();
+  c.moveTo(rx+size*0.62, maskY-3);
+  c.lineTo(rx+size*0.88, maskY-10);
+  c.lineTo(rx+size*0.70, maskY+2);
+  c.closePath(); c.fill();
+
+  // Schnabel
+  c.fillStyle='#fb923c';
+  c.beginPath();
+  c.moveTo(TILE/2 - 3, ry+size*0.55);
+  c.lineTo(TILE/2 + 7, ry+size*0.50);
+  c.lineTo(TILE/2 - 3, ry+size*0.60);
+  c.closePath(); c.fill();
+
+  c.restore();
+}
+
+function roundRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath(); }
+
+// Game loop & logic
+let started=false, running=false, last=0; const scoreEl=document.getElementById('score'); const bestEl=document.getElementById('best'); const startOverlay=document.getElementById('start'); const overOverlay=document.getElementById('gameover'); const finalScore=document.getElementById('finalScore'); const playBtn=document.getElementById('playBtn'); const againBtn=document.getElementById('againBtn'); const muteBtn=document.getElementById('muteBtn'); const shareBtn=document.getElementById('shareBtn'); bestEl.textContent=best;
+
+function reset(){ initWorld(); player={row:2,col:PLAYER_START_COL,alive:true,moving:false,px:0,py:0}; camOffset=0; score=0; scoreEl.textContent='0'; }
+
+function start(){ if(!started){ started=true; reset(); running=true; startOverlay.classList.add('hidden'); if(ACTX && ACTX.state==='suspended' && !muted) ACTX.resume(); } }
+function gameOver(){ running=false; player.alive=false; finalScore.textContent=score; best=Math.max(best,score); localStorage.setItem('mc-best',best); bestEl.textContent=best; overOverlay.classList.remove('hidden'); beep('sawtooth',220,0.12,0.05); }
+
+playBtn.addEventListener('click',start); againBtn.addEventListener('click',()=>{ overOverlay.classList.add('hidden'); reset(); running=true; }); muteBtn.addEventListener('click',()=>{ muted=!muted; muteBtn.setAttribute('aria-pressed',String(muted)); muteBtn.textContent= muted? '🔈 Ton aus' : '🔊 Ton an/aus'; });
+shareBtn.addEventListener('click', async ()=>{ const text=`Ich habe ${score} Felder in Minimal Crossy erreicht!`; if(navigator.share){ try{ await navigator.share({text, url: location.href}); }catch{} } else { navigator.clipboard?.writeText(text); shareBtn.textContent='Kopiert!'; setTimeout(()=>shareBtn.textContent='Teilen',1200);} });
+
+function step(ts){ if(!running){ requestAnimationFrame(step); return; } const dt=Math.min(0.03,(ts-last)/1000||0.016); last=ts;
+  // input
+  if(inputQueue.length){ const m=inputQueue.shift(); tryMove(m.dx,m.dy); }
+  // smooth camera
+  camOffset += (0 - camOffset) * 0.15;
+  // progress animation for player (simple)
+  if(player.moving){ const speed=10*TILE*dt; player.px += speed; player.py += speed; if(player.px>=TILE || player.py>=TILE){ player.moving=false; player.px=player.py=0; } }
+
+  // update rows
+  for(let y=0;y<world.length;y++){ updateDynamic(world[y],y,dt); }
+
+  // when player advanced beyond camera top, append new row at far end
+  while(toY(world.length-1) > canvas.height/DPR + TILE*2){ world.shift(); world.push(makeRow(score + world.length)); }
+
+  // collision & hazards at player's row
+  const prow = world[player.row];
+  if(collideWith(prow, player.row)) gameOver();
+
+  // draw
+  drawBackground(); for(let y=0;y<world.length;y++){ drawRow(world[y],y); } drawPlayer();
+  scoreEl.textContent=String(score);
+  requestAnimationFrame(step);
+}
+requestAnimationFrame(step);
+
+// idle preview
+(function idle(){ if(started) return; drawBackground(); for(let i=0;i<VISIBLE_ROWS;i++){ const t=i%3? (i%2? ROW_GRASS:ROW_ROAD):ROW_WATER; drawRow({type:t, items:[], speed:0}, i);} const t=Date.now()/800; const col=Math.floor(COLS/2 + Math.sin(t)*3); player.col=col; player.row=4; drawPlayer(); requestAnimationFrame(idle); })();
+
+// visibility
+document.addEventListener('visibilitychange',()=>{ if(document.hidden) running=false; });
+
+</script>
+</body>
 </html>
